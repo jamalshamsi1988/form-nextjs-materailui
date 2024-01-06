@@ -1,5 +1,7 @@
 "use client"
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -32,20 +34,48 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignUp() {
+const[fNameError,setFNameError]=useState("");
+const[lNameError,setLNameError]=useState("");
+const[emailError,setEmailError]=useState("")
+const[passwordError,setPasswordError]=useState("");
+
+
   const {
-    watch,
     register,
     formState: { isValid },
   } = useForm({ mode: "all" });
+  
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+  const handleSubmit = () => {
+    let formError=false;
+    if(!fNameError.length){
+      setFNameError("Name is requerd");
+      formError=true;
+    }else{setFNameError("")}
+     if(!lNameError.length){
+      setLNameError("Last name requerd")
+      formError=true;
+      
+    }else{setLNameError("")}
+    if(!emailError.length){
+      setEmailError("Last name requerd")
+      formError=true;
+     
+    }else{setEmailError("")}
+     if(!passwordError.length){
+      setPasswordError("Last name requerd")
+      formError=true;
+     
+    }else{setPasswordError("")}
+
+    if(!formError){
+      alert("thnak you")
+       return true;
+    } else{
+      alert("Please complete the form")
+    }
   };
+ 
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -65,10 +95,13 @@ export default function SignUp() {
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+              onSubmit={handleSubmit}
+          <Box component="form"    sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
+                error={fNameError && fNameError.length ? true:false}
+                helperText={fNameError}
                   autoComplete="given-name"
                   name="firstName"
                   required
@@ -79,12 +112,19 @@ export default function SignUp() {
                  {...register("firstName", {
                 required: true,
                 message: "please Type Your firstName",
-                pattern: /^[A-Za-z]+$/i,
+                // pattern: /^[A-Za-z]+$/i,
               })}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
+                 error={lNameError && lNameError ? true:false}
+                 helperText={lNameError}
+                {...register("lastName", {
+                //  required: true,
+                //  message: "please Type Your lastName",
+                //  pattern: /^[A-Za-z]+$/i,
+               })}
                   required
                   fullWidth
                   id="lastName"
@@ -95,6 +135,13 @@ export default function SignUp() {
               </Grid>
               <Grid item xs={12}>
                 <TextField
+                error={emailError && emailError ? true:false}
+                helperText={emailError}
+               {...register("email", {
+                // required: true,
+                // message: "please Type Your email",
+                // pattern: /^[A-Za-z]+$/i,
+              })}
                   required
                   fullWidth
                   id="email"
@@ -105,6 +152,13 @@ export default function SignUp() {
               </Grid>
               <Grid item xs={12}>
                 <TextField
+                  error={passwordError && passwordError ? true:false}
+                  helperText={passwordError}
+                 {...register("password", {
+                  // required: true,
+                  // message: "please Type Your lastName",
+                  // // pattern: /^[A-Za-z]+$/i,
+                })}
                   required
                   fullWidth
                   name="password"
@@ -126,7 +180,7 @@ export default function SignUp() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              disabled={!isValid}
+              // disabled={!isValid}
             >
               Sign Up
             </Button>
